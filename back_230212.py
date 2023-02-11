@@ -75,9 +75,7 @@ def getDroneById(i):
 def getZoneById(i):
     return [zone for zone in zones_list if zone.id == i][0]
 
-# on cible les zone à investir
-
-
+# on cible les zones à investir
 def zonesCibles():
     r = []
     for z in zones_list:
@@ -86,17 +84,7 @@ def zonesCibles():
                 r.append(z)
     return sorted(r, key=lambda x: len(x.getDrones()), reverse=False)
 
-
-def zonesCiblesVides():
-    r = []
-    for z in zonesCibles():
-        if z.control_id != myId and z.getPoidAdverseMax == 0:
-            r.append(z)
-    return r
-
 # on définit les drones à mobiliser
-
-
 def dronesLibres():
     r = []
     for zone in zones_list:
@@ -114,7 +102,6 @@ def dronesLibres():
 
 
 n_players, myId, n_drones, n_zones = [int(i) for i in input().split()]
-# print([n_players, myId, n_drones, n_zones], file=sys.stderr, flush=True)
 
 zones_list = []
 for i in range(n_zones):
@@ -132,7 +119,6 @@ tour = 0
 while True:
     tour += 1
     for i in range(n_zones):
-        # ID of the team controlling the zone (0, 1, 2, or 3) or -1 if it is not controlled. The zones are given in the same order as in the initialization.
         tid = int(input())
         getZoneById(i).control_id = tid
 
@@ -142,7 +128,6 @@ while True:
             drone_id = i*n_drones + j
             getDroneById(drone_id).x = dx
             getDroneById(drone_id).y = dy
-            # print([dx,dy], file=sys.stderr, flush=True)
 
     out_list = []
     if tour < 50:
@@ -152,26 +137,18 @@ while True:
         for drone in drones_list:
             if drone.id_player == myId:
                 if drone.mire == [0, 0]:
-                    zone_visee = [zone for zone in sorted(
-                        zones_list, key=lambda x: x.getDistance(drone))][0]
+                    zone_visee = [zone for zone in sorted(zones_list, key=lambda x: x.getDistance(drone))][0]
                     drone.mire = [zone_visee.x, zone_visee.y]
 
-    if tour % 10 in [i in range(n_players)]:
-        # for zone in zones_list:
-        #     if zone.getNbPlayers()>2:
-        #         for drone in zone.getDrones():
-        #             if drone.id_player == myId and len(zonesCibles()) > 0:
-        #                 drone.mire = [zonesCibles()[0].x, zonesCibles()[0].y]
+    elif tour % 10 in [i in range(n_players)]:
+
         if len(zonesCibles()) > 0:
             for i, drone in enumerate(dronesLibres()):
                 if i < len(zonesCibles()):
                     drone.mire = [zonesCibles()[i].x, zonesCibles()[i].y]
-                    print('=========allo=========',
-                          file=sys.stderr, flush=True)
-                    print('=========allo=========',
-                          file=sys.stderr, flush=True)
-                    print('=========allo=========',
-                          file=sys.stderr, flush=True)
+                    print('=========allo=========', file=sys.stderr, flush=True)
+                    print('=========allo=========', file=sys.stderr, flush=True)
+                    print('=========allo=========', file=sys.stderr, flush=True)
 
 # ===============
     for drone in drones_list:
@@ -181,12 +158,9 @@ while True:
     for out in out_list:
         print(*out)
 
-    print('n_players, myId, n_drones, n_zones = ' +
-          str([n_players, myId, n_drones, n_zones]), file=sys.stderr, flush=True)
-    print('coord_zones =  ' + str([[z.x, z.y]
-          for z in zones_list]), file=sys.stderr, flush=True)
-    print('coord_drones = ' + str([[d.x, d.y]
-          for d in drones_list]), file=sys.stderr, flush=True)
+    print('n_players, myId, n_drones, n_zones = ' + str([n_players, myId, n_drones, n_zones]), file=sys.stderr, flush=True)
+    print('coord_zones =  ' + str([[z.x, z.y] for z in zones_list]), file=sys.stderr, flush=True)
+    print('coord_drones = ' + str([[d.x, d.y] for d in drones_list]), file=sys.stderr, flush=True)
     print('---', file=sys.stderr, flush=True)
     print('zones cibles : ------', file=sys.stderr, flush=True)
     for z in zonesCibles():
